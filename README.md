@@ -1,7 +1,11 @@
-          ***---regl-test_1---***
+        ***---regl-test_1---***
   ----------------------------------
   
-  3d visualizations & renderings of music using regl
+     3d visualizations & renderings
+         of music using regl
+         
+  ----------------------------------
+         
           AUTHOR : Ruslan Pantaev
                      (arpiseaQ)
 
