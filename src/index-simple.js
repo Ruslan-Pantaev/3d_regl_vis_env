@@ -90,6 +90,7 @@ regl.frame(() => {
   
   // add user input
   drawTriangle({
+  	// -1, +1 here offsets pivot center coordinates
   	translate: [(mouse.x / 1000) - 1, (-mouse.y / 1000) + 1]
   })
 })

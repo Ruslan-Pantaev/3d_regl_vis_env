@@ -3,25 +3,39 @@
 // Thanks to Mikola Lysenko for the regl functional framework
 // ref <https://www.youtube.com/watch?v=ZC6N6An5FVY>
 
-/* Summary
-	-read state of mouse
-	-pass mouse data into webGL thru the uniforms' <regl.prop(...)>
-	-outputs to screen thru vert's <gl_Position = vec4(...)>
-*/
-
-const regl = require('regl')()
+const regl = require('regl')({
+	// extends webGL to use 32bit indices
+	extensions: 'OES_element_index_uint'
+})
 // listens for and returns cursor info
 // <npm install mouse-change>
 const mouse = require('mouse-change')()
 
 // npm install regl-camera
+// ref <https://www.npmjs.com/package/regl-camera>
+const cameraREGL = require('regl-camera')(regl, {
+  center: [0, 2, 2.5],
+  // distance: 0.1,
+  mouse: true,
+  // renderOnDirty: true // renders only on movement - cool for strobe effect
+})
+
 // for 3d, see <http://graphics.stanford.edu/data/3Dscanrep/#bunny>
 // this is a module that handles 3d matrix maths, viewport, etc
-const cameraREGL = require('regl-camera')(regl)
-const bunny = require('bunny')
+// const bunny = require('bunny')
 
 const ndarray = require('ndarray')
+// for extracting iso-surface
+// extracts ndarray up to 4 / 5 dimensions
+const surfaceNets = require('surface-nets')
+const vec3 = require('gl-vec3')
+// npm install angle-normals
+// helps us understand the vectors of which way our obj is pointing for lighting
+// see <https://en.wikipedia.org/wiki/Normal_(geometry)>
+// think perpendicular to obj, like a reflection bouncing off
+const normals = require('angle-normals')
 
+/* TODO ----------------------------------------------------------------- */
 // npm install three
 // ref <https://threejs.org/docs/#manual/introduction/Import-via-modules>
 // npm install --save three-obj-loader
@@ -33,121 +47,18 @@ const ndarray = require('ndarray')
 // const THREE = require('three')
 // const OBJLoader = require('three-obj-loader')
 // OBJLoader(THREE)
-
-// npm install angle-normals
-const normals = require('angle-normals')
-
-
-
-
-
-/* ----------------------------------------------------------------------------- */
-
-// var SEPARATION = 100, AMOUNTX = 50, AMOUNTY = 50;
-// var container, stats;
-// var camera, scene, renderer;
-// var particles, particle, count = 0;
-// var mouseX = 0, mouseY = 0;
-// var windowHalfX = window.innerWidth / 2;
-// var windowHalfY = window.innerHeight / 2;
-// // init();
-// // animate();
-// function init() {
-// 	container = document.createElement( 'div' );
-// 	document.body.appendChild( container );
-// 	camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 1, 10000 );
-// 	camera.position.z = 1000;
-// 	scene = new THREE.Scene();
-// 	particles = new Array();
-// 	var PI2 = Math.PI * 2;
-// 	var material = new THREE.SpriteCanvasMaterial( {
-// 		color: 0xffffff,
-// 		program: function ( context ) {
-// 			context.beginPath();
-// 			context.arc( 0, 0, 0.5, 0, PI2, true );
-// 			context.fill();
-// 		}
-// 	} );
-// 	var i = 0;
-// 	for ( var ix = 0; ix < AMOUNTX; ix ++ ) {
-// 		for ( var iy = 0; iy < AMOUNTY; iy ++ ) {
-// 			particle = particles[ i ++ ] = new THREE.Sprite( material );
-// 			particle.position.x = ix * SEPARATION - ( ( AMOUNTX * SEPARATION ) / 2 );
-// 			particle.position.z = iy * SEPARATION - ( ( AMOUNTY * SEPARATION ) / 2 );
-// 			scene.add( particle );
-// 		}
-// 	}
-// 	renderer = new THREE.CanvasRenderer();
-// 	renderer.setPixelRatio( window.devicePixelRatio );
-// 	renderer.setSize( window.innerWidth, window.innerHeight );
-// 	container.appendChild( renderer.domElement );
-// 	stats = new Stats();
-// 	container.appendChild( stats.dom );
-// 	document.addEventListener( 'mousemove', onDocumentMouseMove, false );
-// 	document.addEventListener( 'touchstart', onDocumentTouchStart, false );
-// 	document.addEventListener( 'touchmove', onDocumentTouchMove, false );
-// 	//
-// 	window.addEventListener( 'resize', onWindowResize, false );
-// }
-// function onWindowResize() {
-// 	windowHalfX = window.innerWidth / 2;
-// 	windowHalfY = window.innerHeight / 2;
-// 	camera.aspect = window.innerWidth / window.innerHeight;
-// 	camera.updateProjectionMatrix();
-// 	renderer.setSize( window.innerWidth, window.innerHeight );
-// }
-// //
-// function onDocumentMouseMove( event ) {
-// 	mouseX = event.clientX - windowHalfX;
-// 	mouseY = event.clientY - windowHalfY;
-// }
-// function onDocumentTouchStart( event ) {
-// 	if ( event.touches.length === 1 ) {
-// 		event.preventDefault();
-// 		mouseX = event.touches[ 0 ].pageX - windowHalfX;
-// 		mouseY = event.touches[ 0 ].pageY - windowHalfY;
-// 	}
-// }
-// function onDocumentTouchMove( event ) {
-// 	if ( event.touches.length === 1 ) {
-// 		event.preventDefault();
-// 		mouseX = event.touches[ 0 ].pageX - windowHalfX;
-// 		mouseY = event.touches[ 0 ].pageY - windowHalfY;
-// 	}
-// }
-// //
-// function animate() {
-// 	requestAnimationFrame( animate );
-// 	render();
-// 	stats.update();
-// }
-// function render() {
-// 	camera.position.x += ( mouseX - camera.position.x ) * .05;
-// 	camera.position.y += ( - mouseY - camera.position.y ) * .05;
-// 	camera.lookAt( scene.position );
-// 	var i = 0;
-// 	for ( var ix = 0; ix < AMOUNTX; ix ++ ) {
-// 		for ( var iy = 0; iy < AMOUNTY; iy ++ ) {
-// 			particle = particles[ i++ ];
-// 			particle.position.y = ( Math.sin( ( ix + count ) * 0.3 ) * 50 ) +
-// 				( Math.sin( ( iy + count ) * 0.5 ) * 50 );
-// 			particle.scale.x = particle.scale.y = ( Math.sin( ( ix + count ) * 0.3 ) + 1 ) * 4 +
-// 				( Math.sin( ( iy + count ) * 0.5 ) + 1 ) * 4;
-// 		}
-// 	}
-// 	renderer.render( scene, camera );
-// 	count += 0.1;
-// }
-
-/* ----------------------------------------------------------------------------- */
+/* ----------------------------------------------------------------------- */
 
 function processMesh (mesh) {
 
 	return regl({
 		// fragment shader - specify pixel color to webGL
+		// these backticks define an interpolated expression (not commas!) - template literals / strings
+		// ref <https://stackoverflow.com/questions/27678052/what-is-the-usage-of-the-backtick-symbol-in-javascript>
 		frag: `
 		precision highp float;
 		varying vec3 color;
+		
 		void main () {
 			// all white
 			gl_FragColor = vec4(color, 1);
@@ -156,7 +67,7 @@ function processMesh (mesh) {
 
 		// vertex shader - where to put vertices of triangle
 		vert: `
-		precision highp float;
+		precision highp float; // or mediump
 		varying vec3 color;
 		// 2d attributes
 		attribute vec3 position, normal;
@@ -180,7 +91,7 @@ function processMesh (mesh) {
 		},
 
 		uniforms: {
-			t: ({tick}) => Math.cos(0.2 * tick)
+			t: ({tick}) => Math.cos(0.01 * tick)
 		},
 
 		// reads mesh's cells of data
@@ -188,23 +99,48 @@ function processMesh (mesh) {
 	})
 }
 
-// const drawMesh = processMesh(bunny)
-
-// resl stands for resource loader + surface-nets + gl-vec3  + gl-mat4  TODO
+// resl stands for resource loader
 require('resl')({
+	// xml http request (not only literal http address, but basic elements)
+	// see <https://www.npmjs.com/package/resl#parser-interface>
+	manifest: {
+		neurons: {
+			// PLAY! (with random files)
+			type: 'binary',
+			src: 'src/test.png',
+			parser: (data) => ndarray(new Uint8Array(data),
+				[300, 230, 230])
+		}
+	},
 
-})
+	onDone({neurons}) {
+		// after the neurons par, the <int> par specifies obj density (possibly brightness or degree of normals)
+		const mesh = surfaceNets(neurons, 180)
+		mesh.positions.forEach((p) => {
+			// mutating in place
+			vec3.divide(p, p, neurons.shape)
+			vec3.scale(p, p, 5)
+		})
 
-regl.frame(() => {
-  regl.clear({
-  	// for strobe use: <Math.random()>
-    color: [0, 0.9, 1, 1],
-    depth: 1
-  })
+		// not working
+		// cameraREGL.distance = // vec3
 
-  cameraREGL(() => {
-  	drawMesh()
-  })
+		const drawMesh = processMesh(mesh)
 
+		regl.frame(() => {
+			regl.clear({
+				// for strobe use: <Math.random()>
+				color: [0.9, 0.9, 0.9, 1],
+				depth: 1
+			})
 
+			cameraREGL(() => {
+				// not working, seems user input is encapsulated within the <regl-camera> obj
+				// translate: [(mouse.x / 1000) - 1, (-mouse.y / 1000) + 1]
+				
+				drawMesh()
+
+			})
+		})
+	}
 })
