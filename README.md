@@ -1,6 +1,6 @@
 
-         3d visualizations & renderings
-              of music using regl
+        3d visualizations & renderings
+             of music using regl
          
    ----------------------------------
       ***------------**------------***   
