@@ -11,9 +11,7 @@
        for permission to build off of
             the audiofabric repo
    https://github.com/rolyatmax/audiofabric   
-   ---
-   **Usage:**
-   
+   ---   
       * clone repo
       * ignore
          .DS_Store
