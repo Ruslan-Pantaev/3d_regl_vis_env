@@ -1,6 +1,6 @@
 
-        3d visualizations & renderings
-             of music using regl
+       3d visualizations & renderings
+            of music using regl
              
           Credits to Taylor Baldwin
        for permission to build off of
