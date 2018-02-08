@@ -16,7 +16,7 @@ USAGE
 * clone repo
 * ignore .tern-project (used for Sublime 3)
 * brew install npm
-* npm install <lib>
+* npm install \<lib>
 * npm run-script build
 * npm run-script start (for real-time dev using budo)
 * see package.json for other npm scripts
