@@ -9,8 +9,8 @@
              
           Credits to Taylor Baldwin
        for permission to build off of
-                    the audiofabric repo
-   https://github.com/rolyatmax/audiofabric   
+            the audiofabric repo
+       https://github.com/rolyatmax/audiofabric   
    ---   
       * clone repo
       * ignore
