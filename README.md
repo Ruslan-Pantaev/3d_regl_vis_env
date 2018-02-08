@@ -13,12 +13,15 @@
    https://github.com/rolyatmax/audiofabric   
    ---   
 * clone repo
-* ignore
-   .DS_Store
-   .tern-project <used for Sublime 3>
+* ignore .tern-project (used for Sublime 3)
 * brew install npm
-* npm install <nodes as needed>
+* npm install <lib>
 * npm run-script build
-* npm run-script start <for real-time dev using budo>
+* npm run-script start (for real-time dev using budo)
 * see package.json for other npm scripts
-* remember to clear cache and killall npm/python as needed       
+* remember to clear cache and killall npm/python as needed
+* have fun!
+   
+TODO
+* use https://github.com/hughsk/web-audio-analyser to react to audio
+* stream audio from Spotify api (fallback to loading tracks to server)
