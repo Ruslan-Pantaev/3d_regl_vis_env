@@ -76,10 +76,10 @@ function processMesh (mesh) {
 		uniform float t;
 
 		void main () {
-			color = 0.5 * (1.0 + normal);
+			color = 1.0 * (0.6 + normal);
 			// pass to output position variable
 			// puts it where input comes from
-			gl_Position = projection * view * vec4(position /* + 0.1 * normal OR - cos(2.0 * position.y + t) * normal */, 1);
+			gl_Position = projection * view * vec4(cos(2.0 * position.y + t) * normal /* + 0.1 * normal OR - cos(2.0 * position.y + t) * normal */, 1);
 		}
 		`,
 
@@ -91,7 +91,7 @@ function processMesh (mesh) {
 		},
 
 		uniforms: {
-			t: ({tick}) => Math.cos(0.01 * tick)
+			t: ({tick}) => Math.tan(0.01 * tick)
 		},
 
 		// reads mesh's cells of data
@@ -107,15 +107,15 @@ require('resl')({
 		neurons: {
 			// PLAY! (with random files)
 			type: 'binary',
-			src: 'src/test.png',
+			src: 'src/test.jpg',
 			parser: (data) => ndarray(new Uint8Array(data),
-				[300, 230, 230])
+				[100, 230, 230])
 		}
 	},
 
 	onDone({neurons}) {
 		// after the neurons par, the <int> par specifies obj density (possibly brightness or degree of normals)
-		const mesh = surfaceNets(neurons, 180)
+		const mesh = surfaceNets(neurons, 50)
 		mesh.positions.forEach((p) => {
 			// mutating in place
 			vec3.divide(p, p, neurons.shape)
