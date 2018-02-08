@@ -7,7 +7,7 @@
             the audiofabric repo
    https://github.com/rolyatmax/audiofabric
          
-   -------
+   ---
       ***------------**------------***   
            AUTHOR : Ruslan Pantaev
              DATE : 2018-2-6
