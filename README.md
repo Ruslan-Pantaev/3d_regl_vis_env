@@ -12,6 +12,7 @@
           the audiofabric repo
    https://github.com/rolyatmax/audiofabric   
    ---   
+USAGE
 * clone repo
 * ignore .tern-project (used for Sublime 3)
 * brew install npm
