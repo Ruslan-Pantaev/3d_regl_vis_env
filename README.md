@@ -25,4 +25,4 @@ USAGE
    
 TODO
 * use https://github.com/hughsk/web-audio-analyser to react to audio
-* stream audio from Spotify api (fallback to loading tracks to server)
+* stream audio from Spotify api (or fallback to loading tracks to server)
