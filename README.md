@@ -12,7 +12,7 @@
             the audiofabric repo
    https://github.com/rolyatmax/audiofabric   
    ---   
-      * clone repo
+* clone repo
       * ignore
          .DS_Store
          .tern-project <used for Sublime 3>
