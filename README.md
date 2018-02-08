@@ -2,7 +2,7 @@
         3d visualizations & renderings
              of music using regl
              
-          Credits to *Taylor* Baldwin*
+          Credits to Taylor Baldwin
        for permission to build off of
             the audiofabric repo
    https://github.com/rolyatmax/audiofabric
