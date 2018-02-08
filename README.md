@@ -12,7 +12,7 @@
             the audiofabric repo
    https://github.com/rolyatmax/audiofabric   
    ---
-   Usage:
+   **Usage:**
    
       * clone repo
       * ignore
