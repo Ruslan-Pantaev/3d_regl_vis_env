@@ -14,13 +14,13 @@
    ---
    Usage:
    
-       * clone repo
-       * ignore
-          .DS_Store
-          .tern-project <used for Sublime 3>
-       * brew install npm
-       * npm install <nodes as needed>
-       * npm run-script build
-       * npm run-script start <for real-time dev using budo>
-       * see package.json for other npm scripts
-       * remember to clear cache and killall npm/python as needed       
+      * clone repo
+      * ignore
+         .DS_Store
+         .tern-project <used for Sublime 3>
+      * brew install npm
+      * npm install <nodes as needed>
+      * npm run-script build
+      * npm run-script start <for real-time dev using budo>
+      * see package.json for other npm scripts
+      * remember to clear cache and killall npm/python as needed       
