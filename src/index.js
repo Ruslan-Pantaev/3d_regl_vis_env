@@ -113,6 +113,7 @@ require('resl')({
 			// PLAY! (with random files)
 			type: 'binary',
 			src: 'src/test.jpg',
+			// => is a function declaration in js ES6
 			parser: (data) => ndarray(new Uint8Array(data),
 				[100, 230, 230])
 		}
