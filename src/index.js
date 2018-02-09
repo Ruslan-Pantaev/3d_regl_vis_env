@@ -1,5 +1,6 @@
-// Author: 	Ruslan Pantaev
-// Date: 	2018-2-6
+// Author: 		Ruslan Pantaev
+// Start-Date: 	2018-2-6
+// Update-Date:	2018-2-9
 
 // Thanks to Mikola Lysenko for the regl functional framework
 // ref <https://www.youtube.com/watch?v=ZC6N6An5FVY>
@@ -19,9 +20,21 @@ const mouse = require('mouse-change')()
 // npm install regl-camera
 // ref <https://www.npmjs.com/package/regl-camera>
 const cameraREGL = require('regl-camera')(regl, {
+  // for Sphere, etc
+  // center: [0, 0, 0],
+
+  // for My Fav
   center: [0, 2, 2.5],
-  // distance: 0.1,
+  
+  distance: 12.0,
   mouse: true,
+  // theta / phi angles
+  theta: 0.4, 	// left-right
+  phi: -0.2, 	// up-down
+  fovy: Math.PI / 5, // widen the spread lol, kind of like zoom
+  zoomSpeed: 0.5,
+  rotationSpeed: 0.7,
+  damping: 0.5 // sets inertia of rotation
   // renderOnDirty: true // renders only on movement - cool for strobe effect
 })
 
@@ -57,6 +70,7 @@ const normals = require('angle-normals')
 function processMesh (mesh) {
 
 	return regl({
+		// see for GLSL <https://en.wikipedia.org/wiki/OpenGL_Shading_Language>
 		// fragment shader - specify pixel color to webGL
 		// these backticks define an interpolated expression (not commas!) - template literals / strings
 		// ref <https://stackoverflow.com/questions/27678052/what-is-the-usage-of-the-backtick-symbol-in-javascript>
@@ -65,7 +79,6 @@ function processMesh (mesh) {
 		varying vec3 color;
 		
 		void main () {
-			// all white
 			gl_FragColor = vec4(color, 1);
 		}
 		`,
@@ -81,10 +94,29 @@ function processMesh (mesh) {
 		uniform float t;
 
 		void main () {
-			color = 1.0 * (0.6 + normal);
+			color = 1.0 * (0.9 + t * normal);
+			
 			// pass to output position variable
 			// puts it where input comes from
-			gl_Position = projection * view * vec4(cos(2.0 * position.y + t) * normal /* + 0.1 * normal OR - cos(2.0 * position.y + t) * normal */, 1);
+			// NOTE codomains: sin = [-1,1] period = 2PI, cos = [-1,1] period = 2PI, tan = Real Numbers period = PI
+			// ref <https://www.ma.utexas.edu/users/jmeth/TrigSheet.pdf>
+
+			// Pulsing Sphere
+			// gl_Position = projection * view * vec4(cos(2.0 * position.y + t) * normal /* + 0.1 * normal OR - cos(2.0 * position.y + t) * normal */, 0.7);
+
+			// Wild Shards
+			// gl_Position = projection * view * vec4(tan(2.0 * position.y + t) * normal /* + 0.1 * normal OR - cos(2.0 * position.y + t) * normal */, 2000);
+
+			// Fat Baseball Bat
+			// gl_Position = projection * view * vec4(cos(8.0 * position.y + t) + 0.5 * normal /* + 0.1 * normal OR - cos(2.0 * position.y + t) * normal */, 0.5);
+
+			// Triangular Sphere
+			// gl_Position = projection * view * vec4(cos(2.0 * position + t) * normal, 0.4);
+
+			// My Fav - Pulsing Art Canvas
+			gl_Position = (projection + 0.0) * (view + 0.0) * vec4(position - (t * normal), 1);
+
+
 		}
 		`,
 
@@ -92,11 +124,14 @@ function processMesh (mesh) {
 		attributes: {
 			// for 3d we want to draw stuff from the mesh
 			position: mesh.positions,
+
 			normal: normals(mesh.cells, mesh.positions)
 		},
 
 		uniforms: {
-			t: ({tick}) => Math.tan(0.01 * tick)
+			// arrow function declaration =>
+			// ref <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions>
+			t: ({tick}) => Math.cos(0.01 * tick)
 		},
 
 		// reads mesh's cells of data
@@ -109,22 +144,22 @@ require('resl')({
 	// xml http request (not only literal http address, but basic elements)
 	// see <https://www.npmjs.com/package/resl#parser-interface>
 	manifest: {
-		neurons: {
+		source: {
 			// PLAY! (with random files)
 			type: 'binary',
 			src: 'src/test.jpg',
-			// => is a function declaration in js ES6
 			parser: (data) => ndarray(new Uint8Array(data),
-				[100, 230, 230])
+				[5, 300, 210]) 	// for My Fav
+				// [80, 230, 230]) 	// for sphere
 		}
 	},
 
-	onDone({neurons}) {
+	onDone({source}) {
 		// after the neurons par, the <int> par specifies obj density (possibly brightness or degree of normals)
-		const mesh = surfaceNets(neurons, 50)
+		const mesh = surfaceNets(source, 100)
 		mesh.positions.forEach((p) => {
 			// mutating in place
-			vec3.divide(p, p, neurons.shape)
+			vec3.divide(p, p, source.shape)
 			vec3.scale(p, p, 5)
 		})
 
@@ -134,9 +169,10 @@ require('resl')({
 		const drawMesh = processMesh(mesh)
 
 		regl.frame(() => {
+			// perhaps similar to creating a canvas
 			regl.clear({
 				// for strobe use: <Math.random()>
-				color: [0.9, 0.9, 0.9, 1],
+				color: [Math.random(0.9)+0.8, 0.9, 0.9, 1],
 				depth: 1
 			})
 
