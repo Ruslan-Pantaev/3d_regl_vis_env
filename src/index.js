@@ -4,10 +4,12 @@
 
 // Thanks to Mikola Lysenko for the regl functional framework
 // ref <https://www.youtube.com/watch?v=ZC6N6An5FVY>
-
+//
 // Credits to Taylor Baldwin for permission to build off of
 // the audiofabric repo
 // ref <https://github.com/rolyatmax/audiofabric>
+ 
+// TODO clean up comments? 
 
 const regl = require('regl')({
 	// extends webGL to use 32bit indices
