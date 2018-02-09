@@ -6,6 +6,7 @@
 
 // Credits to Taylor Baldwin for permission to build off of
 // the audiofabric repo
+// ref <https://github.com/rolyatmax/audiofabric>
 
 const regl = require('regl')({
 	// extends webGL to use 32bit indices
