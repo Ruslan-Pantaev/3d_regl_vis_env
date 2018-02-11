@@ -55,6 +55,8 @@ const vec3 = require('gl-vec3')
 // think perpendicular to obj, like a reflection bouncing off
 const normals = require('angle-normals')
 
+// gl-mat4 is for 4x4 matrix manipulations
+
 /* TODO ----------------------------------------------------------------- */
 // npm install three
 // ref <https://threejs.org/docs/#manual/introduction/Import-via-modules>
@@ -73,18 +75,7 @@ function processMesh (mesh) {
 
 	return regl({
 		// see for GLSL <https://en.wikipedia.org/wiki/OpenGL_Shading_Language>
-		// fragment shader - specify pixel color to webGL
-		// these backticks define an interpolated expression (not commas!) - template literals / strings
-		// ref <https://stackoverflow.com/questions/27678052/what-is-the-usage-of-the-backtick-symbol-in-javascript>
-		frag: `
-		precision highp float;
-		varying vec3 color;
 		
-		void main () {
-			gl_FragColor = vec4(color, 1);
-		}
-		`,
-
 		// vertex shader - where to put vertices of triangle
 		vert: `
 		precision highp float; // or mediump
@@ -122,6 +113,19 @@ function processMesh (mesh) {
 		}
 		`,
 
+		// fragment shader - specify pixel color to webGL
+		// when zoomed in, pixels increase and can be gpu taxing - consider using vert instead for heavy ops
+		// these backticks define an interpolated expression (not commas!) - template literals / strings
+		// ref <https://stackoverflow.com/questions/27678052/what-is-the-usage-of-the-backtick-symbol-in-javascript>
+		frag: `
+		precision highp float;
+		varying vec3 color;
+		
+		void main () {
+			gl_FragColor = vec4(color, 1);
+		}
+		`,
+
 		// data to run in the vertex shader
 		attributes: {
 			// for 3d we want to draw stuff from the mesh
@@ -134,6 +138,8 @@ function processMesh (mesh) {
 			// arrow function declaration =>
 			// ref <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions>
 			t: ({tick}) => Math.cos(0.01 * tick)
+
+			// TODO set t to react to music web-audio-analyser
 		},
 
 		// reads mesh's cells of data
@@ -174,7 +180,7 @@ require('resl')({
 			// perhaps similar to creating a canvas
 			regl.clear({
 				// for strobe use: <Math.random()>
-				color: [Math.random(0.9)+0.8, 0.9, 0.9, 1],
+				color: [0.9, 0.9, 0.9, 1],
 				depth: 1
 			})
 
