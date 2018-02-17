@@ -9,11 +9,22 @@
 // the audiofabric repo
 // ref <https://github.com/rolyatmax/audiofabric>
  
-// TODO clean up comments? 
+// TODO clean up comments?
+ 
+// DOM container div
+// var regl = require('regl')(element)
+
+// or:
+
+// var regl = require('regl')({
+//   container: element
+// })
 
 const regl = require('regl')({
+	canvas: document.getElementById("myCanvas"),
+	// pixelRatio: 1,
 	// extends webGL to use 32bit indices
-	extensions: 'OES_element_index_uint'
+	extensions: 'OES_element_index_uint',
 })
 // listens for and returns cursor info
 // <npm install mouse-change>
@@ -36,7 +47,8 @@ const cameraREGL = require('regl-camera')(regl, {
   fovy: Math.PI / 5, // widen the spread lol, kind of like zoom
   zoomSpeed: 0.5,
   rotationSpeed: 0.7,
-  damping: 0.5 // sets inertia of rotation
+  damping: 0.5, // sets inertia of rotation
+  noScroll: true,
   // renderOnDirty: true // renders only on movement - cool for strobe effect
 })
 

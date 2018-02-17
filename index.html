@@ -1,63 +1,81 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
-<head>
-  <title>test_1</title>
-  <meta charset="utf-8">
-  <meta name="description" content="An exercise in regl">
-  <meta name="news_keywords" content="webgl, 3d, data visualizer, data, data vis">
+  <head>
+    <title>3D_Music</title>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <!-- <meta charset="utf-8"> -->
+    <meta name="description" content="An exercise in regl">
+    <meta name="news_keywords" content="webgl, 3d, data visualizer, data, data vis">
 
-  <meta property="og:title" content="test_1">
-  <meta property="og:site_name" content="rpantaev.com">
-  <meta property="og:url" content="rpantaev.com">
-  <meta property="og:description" content="Experience Music in 3D">
-  <meta property="og:type" content="article">
+    <meta property="og:title" content="test_1">
+    <meta property="og:site_name" content="rpantaev.com">
+    <meta property="og:url" content="rpantaev.com">
+    <meta property="og:description" content="Experience Music in 3D">
+    <meta property="og:type" content="article">
 
-   <style>
-    /* pt-mono-regular - latin */
-    @font-face {
-      font-family: 'PT Mono';
-      font-style: normal;
-      font-weight: 400;
-      src: url('src/fonts/pt-mono-v5-latin-regular.eot'); /* IE9 Compat Modes */
-      src: local('PT Mono'), local('PTMono-Regular'),
-           url('src/fonts/pt-mono-v5-latin-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
-           url('src/fonts/pt-mono-v5-latin-regular.woff2') format('woff2'), /* Super Modern Browsers */
-           url('src/fonts/pt-mono-v5-latin-regular.woff') format('woff'), /* Modern Browsers */
-           url('src/fonts/pt-mono-v5-latin-regular.ttf') format('truetype'), /* Safari, Android, iOS */
-           url('src/fonts/pt-mono-v5-latin-regular.svg#PTMono') format('svg'); /* Legacy iOS */
-    }
+    <link rel="stylesheet" type="text/css" href="./style.css">
+    
+    <!-- ref <https://www.freefavicon.com/freefavicons/objects/iconinfo/birdie-paper-1-152-26790.html> -->
+    <!-- Website Favicon -->
+    <link rel="icon" type="image/x-icon" href="./src/favicon/favicon.ico">
+    <!-- Apple iOS devices and Google Android Devices -->
+    <link rel="apple-touch-icon-precomposed" href="./src/favicon/birdie-paper-1-152-26790.png">
+    <!-- IE 10 Metro Tile Icon -->
+    <meta name="msapplication-TileColor" content="#ffffff" />
+    <meta name="msapplication-TileImage" content="./src/favicon/birdie-paper-1-144-26790.png">
+    <!-- Everything Else -->
+    <link rel="apple-touch-icon-precomposed" sizes="152x152" href="./src/favicon/birdie-paper-1-152-26790.png">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="./src/favicon/birdie-paper-1-144-26790.png">
+    <link rel="apple-touch-icon-precomposed" sizes="120x120" href="./src/favicon/birdie-paper-1-120-26790.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="./src/favicon/birdie-paper-1-114-26790.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="./src/favicon/birdie-paper-1-72-26790.png">
+    <link rel="apple-touch-icon-precomposed" href="./src/favicon/birdie-paper-1-57-26790.png">
+    <link rel="icon" href="./src/favicon/birdie-paper-1-32-26790.png" sizes="32x32">
 
-    html, body {
-      color: #e2e2e2;
-      background-color: rgb(0, 0, 0);
-      /*RP - 2018-2-6*/
-      font-family: 'PT Mono', monospace;
-      -webkit-font-smoothing: antialiased;
-      margin: 0;
-      padding: 0;
-    }
-  </style>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css" rel="stylesheet"/>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js'></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet prefetch"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css" rel="stylesheet prefetch"/>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>    
+  </head>
   
-</head>
-  
-<body>
-  <div>TEST_1!</div>
-  <!-- see <http://browserify.org/> -->
-  <script src="bundle.js"></script>
-  <script>
-    // RP - 2018-2-6
-    // see <https://www.thyngster.com/how-does-the-universal-analytics-snippet-work/>
-    // TODO
-    // (function(i,s,o,g,r,a,m) {
-    //   i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
-    //     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();
-    //     a=s.createElement(o), m=s.getElementsByTagName(o)[0];
-    //     a.async=1;
-    //     a.src=g;
-    //     m.parentNode.insertBefore(a,m)
-    //   })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-    // ga('create', 'UA-36884625-1', 'auto');
-    // ga('send', 'pageview');
-  </script>
-</body>
+  <body onload="resizeCanvas()" onresize="resizeCanvas()">
+    <div class="divClass">
+      <p> Regl_Test_1 </p>
+    </div>
+
+    <div id="canvasContainer">
+      <canvas id="myCanvas" width="1000" height="1000">
+        <!--regl container-->
+      </canvas>
+    </div>
+
+    <div class="divClass">
+      <p> Not iOS / Android Compatible yet <br> Zoom in with scroll | Move in 3D with click-drag </p>
+    </div>
+
+    <script>
+      function resizeCanvas() {
+        var canvs = document.getElementById("myCanvas");
+        canvs.width = window.innerWidth / 1.2;
+        canvs.height = window.innerHeight / 1.3;
+      }
+    </script>
+
+    <!-- see <http://browserify.org/> -->
+    <script src="bundle.js"></script>
+    
+    <script>
+      // RP - 2018-2-14
+      // see <https://www.thyngster.com/how-does-the-universal-analytics-snippet-work/>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-87922163-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+  </body>
 </html>
