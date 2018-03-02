@@ -6,13 +6,12 @@
     ***------------**------------***
 
      3d visualizations & renderings
-           of music using regl
-             
-        Credits to Taylor Baldwin
-     for permission to build off of
-          the audiofabric repo
-   https://github.com/rolyatmax/audiofabric   
-   ---   
+           of music using regl      
+   --- 
+CREDITS
+* Credits to Taylor Baldwin for permission to build off of the audiofabric repo
+*https://github.com/rolyatmax/audiofabric
+
 PREVIEW
 * http://rpantaev.com/regl_1/
 
