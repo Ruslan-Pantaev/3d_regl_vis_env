@@ -13,6 +13,9 @@
           the audiofabric repo
    https://github.com/rolyatmax/audiofabric   
    ---   
+PREVIEW
+* http://rpantaev.com/regl_1/
+
 USAGE
 * clone repo
 * ignore .tern-project (used for Sublime 3)
