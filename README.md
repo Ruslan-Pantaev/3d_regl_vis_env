@@ -10,7 +10,7 @@
    --- 
 CREDITS
 * Credits to Taylor Baldwin for permission to build off of the audiofabric repo
-*https://github.com/rolyatmax/audiofabric
+* https://github.com/rolyatmax/audiofabric
 
 PREVIEW
 * http://rpantaev.com/regl_1/
